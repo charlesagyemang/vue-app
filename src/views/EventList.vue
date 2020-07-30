@@ -1,5 +1,11 @@
 <template lang="html">
-  <h1>Even List</h1>
+
+  <div class="">
+    <h1>Even List</h1>
+
+    <router-link :to="{ name: 'event-show', params: { id: '1'} }"> Show Event #1</router-link>
+  </div>
+
 </template>
 
 <script>
