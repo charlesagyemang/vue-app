@@ -25,25 +25,25 @@
 
 <script>
 
-import EventService from '@/services/EventService'
+import { mapState } from 'vuex'
+import NProgress from 'nprogress'
+import store from '@/store/store'
 
 
 export default {
+
   props: ['id'],
 
-  data () {
-    return {
-      event: {}
-    }
+  beforeRouteEnter(routeTo, routeFrom, next){
+    NProgress.start()
+    store.dispatch('event/fetchEventById', routeTo.params.id).then(() => {
+      NProgress.done()
+      next()
+    })
   },
 
-  created(){
-    EventService.getEvent(this.id)
-    .then((response) => {
-      this.event = response.data
-    }).catch((err) => {
-      console.log(err);
-    })
+  computed: {
+    ...mapState('event', ['event'])
   }
 }
 </script>
