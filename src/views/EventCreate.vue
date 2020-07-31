@@ -3,18 +3,35 @@
   <div>
     <h1>Create an Event</h1>
     <form @submit.prevent="createEvent">
-
       <h3>Name & describe your event</h3>
-      <BaseInput class="field" label="Title" v-model="event.title" type="text" placeholder="Add A Name"/>
-      <BaseInput class="field" label="Description" v-model="event.description" type="text" placeholder="Add A Description" />
+      <BaseInput
+        class="field"
+        label="Title"
+        v-model="event.title"
+        type="text"
+        placeholder="Add A Name"
+      />
+      <BaseInput
+        class="field"
+        label="Description"
+        v-model="event.description"
+        type="text"
+        placeholder="Add A Description"
+      />
 
       <h3>Where is your event?</h3>
-      <BaseInput class="field" label="Location" v-model="event.location" type="text" placeholder="Add a location" />
+      <BaseInput
+        class="field"
+        label="Location"
+        v-model="event.location"
+        type="text"
+        placeholder="Add a location"
+      />
 
       <h3>When is your event?</h3>
       <div class="field">
         <label>Date</label>
-        <datepicker v-model="event.date" placeholder="Select a date"/>
+        <datepicker v-model="event.date" placeholder="Select a date" />
       </div>
 
       <div class="field">
@@ -25,78 +42,71 @@
       </div>
 
       <!-- <input type="submit" class="button -fill-gradient" value="Submit"/> -->
-      <BaseButton>Submit</BaseButton>
+      <BaseButton type="submit" buttonClass="-fill-gradient">Submit</BaseButton>
     </form>
   </div>
 </template>
 
 
 <script>
-import Datepicker from 'vuejs-datepicker'
-import NProgress from 'nprogress'
+import Datepicker from "vuejs-datepicker";
+import NProgress from "nprogress";
 
 export default {
-
   components: {
-      Datepicker,
+    Datepicker,
   },
 
-  data () {
-    const times = []
+  data() {
+    const times = [];
 
     for (var i = 1; i < 24; i++) {
-      times.push(i + ":00 ")
+      times.push(i + ":00 ");
     }
 
     return {
       times,
-      event: this.createFreshEventObject()
-    }
+      event: this.createFreshEventObject(),
+    };
   },
 
   methods: {
-
-
     createFreshEventObject() {
-
-      const user = this.$store.state.user.user
-      const id = Math.floor(Math.random() * 100000000)
+      const user = this.$store.state.user.user;
+      const id = Math.floor(Math.random() * 100000000);
 
       return {
         id,
         userId: user.id,
-        title: '',
-        description: '',
-        location: '',
-        date: '',
-        time: '',
-      }
+        title: "",
+        description: "",
+        location: "",
+        date: "",
+        time: "",
+      };
     },
 
     createEvent() {
-
-      NProgress.start()
-      this.$store.dispatch('event/createEvent', this.event).then(() => {
-        this.$router.push({
-          name: 'event-show',
-          params: { id: this.event.id }
+      NProgress.start();
+      this.$store
+        .dispatch("event/createEvent", this.event)
+        .then(() => {
+          this.$router.push({
+            name: "event-show",
+            params: { id: this.event.id },
+          });
+          this.event = createFreshEventObject();
         })
-        this.event = createFreshEventObject();
-      }).catch(() => {
-        NProgress.done()
-      })
+        .catch(() => {
+          NProgress.done();
+        });
     },
-
-
-  }
-
-
-
-}
+  },
+};
 </script>
 
 <style lang="css" scoped>
 .field {
-  margin-bottom: 24px
+  margin-bottom: 24px;
 }
 </style>
