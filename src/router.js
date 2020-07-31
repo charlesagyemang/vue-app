@@ -37,12 +37,10 @@ const router = new Router({
           routeTo.params.event = event
           next()
         }).catch((error) => {
-          console.log(error);
           if (error.response && error.response.status == 404) {
             next({ name: '404', params: {resource: 'Event'} })
           } else {
             next({ name: 'network-issue' })
-
           }
         })
       },
