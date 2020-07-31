@@ -83,13 +83,7 @@ export const actions = {
       .then((response) => {
         commit('SET_EVENT', response.data)
         return response.data
-      }).catch((err) => {
-        const notification = {
-          type: 'error',
-          message: 'There was a problem fetching event: ' + error.message
-        }
-        dispatch('notification/add', notification, {root: true})
-      });
+      })
     }
   }
 

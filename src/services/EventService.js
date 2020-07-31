@@ -7,7 +7,8 @@ const apiClient = axios.create({
     Accept: 'application/json',
     'Content-Type': 'application/json',
     'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IkdGcmthTWY5ZXFMQkpiSmlFIiwiaWF0IjoxNTk2MTgxODMxLCJleHAiOjE1OTYyMTA2MzF9.YszV3Bke7n_Af7ojdhTONIW5s2fn6j2u1bvH60P2Pls'
-  }
+  },
+  timeout: 60000
 })
 
 // apiClient.interceptors.request.use( config => {
