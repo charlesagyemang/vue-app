@@ -10,14 +10,25 @@
         v-model="event.title"
         type="text"
         placeholder="Add A Name"
+        :class="{error: $v.event.title.$error }"
+        @blur="$v.event.title.$touch()"
       />
+      <template v-if="$v.event.title.$error">
+        <p v-if="!$v.event.title.required" class="errorMessage">Title Is Required. </p>
+      </template>
+
       <BaseInput
         class="field"
         label="Description"
         v-model="event.description"
         type="text"
         placeholder="Add A Description"
+        :class="{error: $v.event.title.$error }"
+        @blur="$v.event.description.$touch()"
       />
+      <template v-if="$v.event.description.$error">
+        <p v-if="!$v.event.description.required" class="errorMessage">Description Is Required. </p>
+      </template>
 
       <h3>Where is your event?</h3>
       <BaseInput
@@ -26,13 +37,27 @@
         v-model="event.location"
         type="text"
         placeholder="Add a location"
+        :class="{error: $v.event.title.$error }"
+        @blur="$v.event.location.$touch()"
       />
+      <template v-if="$v.event.location.$error">
+        <p v-if="!$v.event.location.required" class="errorMessage">Location Is Required. </p>
+      </template>
 
       <h3>When is your event?</h3>
       <div class="field">
         <label>Date</label>
-        <datepicker v-model="event.date" placeholder="Select a date" />
+        <datepicker
+          v-model="event.date"
+          placeholder="Select a date"
+          :input-class="{ error: $v.event.date.$error}"
+          @closed="$v.event.date.$touch()"
+          />
       </div>
+
+      <template v-if="$v.event.date.$error">
+        <p v-if="!$v.event.date.required" class="errorMessage">date Is Required. </p>
+      </template>
 
       <div class="field">
         <label>Select a time</label>
@@ -43,6 +68,7 @@
 
       <!-- <input type="submit" class="button -fill-gradient" value="Submit"/> -->
       <BaseButton type="submit" buttonClass="-fill-gradient">Submit</BaseButton>
+      <p v-if="$v.$anyError" class="errorMessage">Please Fill Out The Required Field(s)</p>
     </form>
   </div>
 </template>
@@ -51,6 +77,7 @@
 <script>
 import Datepicker from "vuejs-datepicker";
 import NProgress from "nprogress";
+import { required } from 'vuelidate/lib/validators';
 
 export default {
   components: {
@@ -70,6 +97,17 @@ export default {
     };
   },
 
+  validations: {
+    event: {
+      userId: { required },
+      title: { required },
+      description: { required },
+      location: { required },
+      date: { required },
+      time: { required },
+    }
+  },
+
   methods: {
     createFreshEventObject() {
       const user = this.$store.state.user.user;
@@ -87,19 +125,22 @@ export default {
     },
 
     createEvent() {
-      NProgress.start();
-      this.$store
-        .dispatch("event/createEvent", this.event)
-        .then(() => {
-          this.$router.push({
-            name: "event-show",
-            params: { id: this.event.id },
+      this.$v.$touch()
+      if (!this.$v.$invalid) {
+        NProgress.start();
+        this.$store
+          .dispatch("event/createEvent", this.event)
+          .then(() => {
+            this.$router.push({
+              name: "event-show",
+              params: { id: this.event.id },
+            });
+            this.event = createFreshEventObject();
+          })
+          .catch(() => {
+            NProgress.done();
           });
-          this.event = createFreshEventObject();
-        })
-        .catch(() => {
-          NProgress.done();
-        });
+      }
     },
   },
 };
