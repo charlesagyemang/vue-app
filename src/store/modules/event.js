@@ -8,6 +8,7 @@ export const state = {
   eventsTotal: 0,
   currentDataCount: 0,
   event: {},
+  perPage: 3,
 
 }
 
@@ -55,8 +56,8 @@ export const actions = {
     })
   },
 
-  fetchEvents({ commit, dispatch }, { perPage, page }){
-    EventService.getEvents(perPage, page)
+  fetchEvents({ commit, dispatch, state }, { page }){
+    return EventService.getEvents(state.perPage, page)
     .then((response) => {
       commit('SET_EVENTS_TOTAL', response.data.count)
       commit('SET_EVENTS', response.data.rows)

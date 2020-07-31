@@ -23,6 +23,7 @@ const router = new Router({
       path: '/events',
       name: 'event-list',
       component: EventList,
+      props: true,
     },
     {
       path: '/event/:id',
